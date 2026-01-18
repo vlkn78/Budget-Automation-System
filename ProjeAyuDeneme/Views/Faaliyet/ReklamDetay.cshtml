@@ -1,0 +1,46 @@
+﻿@model ProjeAyuDeneme.Models.Reklam
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Reklam Faaliyeti Detayı";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">Reklam: @Model.Mecra - @Model.Donem</h3>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Ofis</dt>
+            <dd class="col-sm-9">@Model.Ofis.Ad</dd>
+
+            <dt class="col-sm-3">Ülke</dt>
+            <dd class="col-sm-9">@Model.Ulke</dd>
+
+            <dt class="col-sm-3">Mecra</dt>
+            <dd class="col-sm-9">@Model.Mecra</dd>
+
+            <dt class="col-sm-3">Dönem</dt>
+            <dd class="col-sm-9">@Model.Donem</dd>
+
+            <dt class="col-sm-3">İçerik</dt>
+            <dd class="col-sm-9">@Model.Icerik</dd>
+
+            <dt class="col-sm-3">Maliyet</dt>
+            <dd class="col-sm-9">@Model.Degeri.ToString("C", trCulture)</dd>
+
+            <dt class="col-sm-3">Tertip</dt>
+            <dd class="col-sm-9">@Model.Tertip</dd>
+
+            <dt class="col-sm-3">Kaydı Giren Kullanıcı</dt>
+            <dd class="col-sm-9">@Model.User.UserName</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="ReklamListesi" class="btn btn-secondary">Listeye Geri Dön</a>
+    </div>
+</div>

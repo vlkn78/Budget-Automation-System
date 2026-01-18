@@ -1,0 +1,59 @@
+﻿@model ProjeAyuDeneme.ViewModels.SektorAnalizViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Sektör İşbirliği Analizi";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="lead">Tüm sektör işbirliği faaliyetlerine ilişkin özet ve analitik veriler.</p>
+<hr />
+
+@if (Model.ToplamKayitSayisi > 0)
+{
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- ANA GÖSTERGELER KARTI -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Genel Performans</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 border-end">
+                            <h3 class="fw-bold mb-0">@Model.ToplamKayitSayisi</h3>
+                            <span class="text-muted">Toplam Kayıt Sayısı</span>
+                        </div>
+                        <div class="col-6">
+                            <h3 class="fw-bold mb-0">@Model.ToplamMaliyet.ToString("C0", trCulture)</h3>
+                            <span class="text-muted">Toplam Maliyet</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORTALAMALAR KARTI -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Analitik Değerler</h3>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span>Kayıt Başına Ortalama Maliyet</span>
+                        <span class="fw-bold">@Model.KayitBasinaOrtalamaMaliyet.ToString("C", trCulture)</span>
+                    </div>
+                    <div class="progress" style="height: 5px;">
+                        <div class="progress-bar bg-purple" role="progressbar" style="width: 50%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        Henüz analiz edilecek sektör işbirliği kaydı bulunmamaktadır.
+    </div>
+}

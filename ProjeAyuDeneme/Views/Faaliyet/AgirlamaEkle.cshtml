@@ -1,0 +1,135 @@
+﻿@model ProjeAyuDeneme.ViewModels.AgirlamaEkleViewModel
+
+@{
+    ViewData["Title"] = "Yeni Ağırlama Kaydı Ekle";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <form asp-action="AgirlamaEkle" method="post">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="OfisId"></label>
+                                <select asp-for="OfisId" class="form-select" asp-items="Model.OfisListesi">
+                                    <option value="">- Lütfen Bir Ofis Seçiniz -</option>
+                                </select>
+                                <span asp-validation-for="OfisId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Ulke"></label>
+                                <input asp-for="Ulke" class="form-control" />
+                                <span asp-validation-for="Ulke" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Kurum"></label>
+                                <input asp-for="Kurum" class="form-control" />
+                                <span asp-validation-for="Kurum" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Sehir"></label>
+                                <select asp-for="Sehir" class="form-select" asp-items="Model.SehirListesi">
+                                    <option value="">- Lütfen Bir Şehir Seçiniz -</option>
+                                </select>
+                                <span asp-validation-for="Sehir" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Tarih"></label>
+                                <input asp-for="Tarih" type="date" class="form-control" />
+                                <span asp-validation-for="Tarih" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Tertip"></label>
+                                <select asp-for="Tertip" class="form-select" asp-items="Model.TertipListesi">
+                                    <option value="">- Lütfen Bir Tertip Seçiniz -</option>
+                                </select>
+                                <span asp-validation-for="Tertip" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="mb-3">
+                        <label asp-for="Kapsam"></label>
+                        <textarea asp-for="Kapsam" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Kapsam" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Sonuc"></label>
+                        <textarea asp-for="Sonuc" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Sonuc" class="text-danger"></span>
+                    </div>
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Adet"></label>
+                                <input asp-for="Adet" type="number" class="form-control" />
+                                <span asp-validation-for="Adet" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Degeri"></label>
+                                <input asp-for="Degeri" id="degeri-maskeli" class="form-control" />
+                                <span asp-validation-for="Degeri" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Ağırlama Kaydını Oluştur</button>
+                    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">İptal</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Sadece AutoNumeric script'ini bırakıyoruz. Hata veren validation script'lerini sildik. -->
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            new AutoNumeric('#degeri-maskeli', {
+                currencySymbol: ' ₺',
+                currencySymbolPlacement: 's',
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                unformatOnSubmit: true
+            });
+        });
+    </script>
+}
+

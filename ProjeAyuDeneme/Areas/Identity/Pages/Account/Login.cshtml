@@ -1,0 +1,51 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Giriş Yap";
+}
+
+@* AdminLTE'nin Login kutusu yapısını kullanıyoruz *@
+<div class="card">
+    <div class="card-body login-card-body">
+        <p class="login-box-msg">Oturum için giriş yapın</p>
+
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+            <div class="input-group mb-3">
+                <input asp-for="Input.Email" class="form-control" placeholder="E-Posta" />
+                <div class="input-group-text"><span class="bi bi-envelope"></span></div>
+            </div>
+            <span asp-validation-for="Input.Email" class="text-danger d-block mb-3"></span>
+
+            <div class="input-group mb-3">
+                <input asp-for="Input.Password" class="form-control" placeholder="Parola" />
+                <div class="input-group-text"><span class="bi bi-lock"></span></div>
+            </div>
+            <span asp-validation-for="Input.Password" class="text-danger d-block mb-3"></span>
+
+            <div class="row">
+                <div class="col-8">
+                    <div class="form-check">
+                        <input asp-for="Input.RememberMe" class="form-check-input" />
+                        <label asp-for="Input.RememberMe" class="form-check-label">Beni Hatırla</label>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="d-grid gap-2">
+                        <button id="login-submit" type="submit" class="btn btn-primary btn-block">Giriş</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <p class="mb-0">
+            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-center">Yeni bir üyelik kaydı yap</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

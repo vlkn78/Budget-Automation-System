@@ -1,0 +1,125 @@
+﻿@model ProjeAyuDeneme.ViewModels.GenelButceRaporuViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Genel Bütçe Durum Raporu";
+    var trCulture = new CultureInfo("tr-TR"); // Türkçe formatlama için
+}
+
+<h6>@ViewData["Title"] (@Model.SecilenYil)</h6>
+
+
+<!-- Yıl Seçim Formu -->
+<form asp-action="GenelButceRaporu" method="get" class="mb-3 row gx-2 align-items-end no-print">
+    <div class="col-auto">
+        <label for="yilInput" class="form-label">Yıl Seçiniz:</label>
+        <input type="number" id="yilInput" name="yil" value="@Model.SecilenYil" class="form-control" style="width: 120px;" min="2020" max="@DateTime.Now.Year" />
+    </div>
+    <div class="col-auto">
+        <button type="submit" class="btn btn-success">Raporu Getir</button>
+    </div>
+</form>
+
+@if (Model.RaporSatirlari.Any())
+{
+    <div class="card">
+        <div class="card-body p-0">
+            <table class="table table-bordered text-center table-striped">
+                <thead class="table-light">
+                    <tr>
+                        <th rowspan="2" class="align-middle">Tertip</th>
+                        <th class="text-center">Başlangıç Ödeneği</th>
+                        <th class="text-center">Faaliyet Toplamı</th>
+                        <th class="text-center">Gönderilen Ödenek Top.</th>
+                        <th class="text-center">Harcama Toplamı</th>
+                        <th class="text-center">Kullanılabilecek Öd.</th>
+                        <th class="text-center">Beklenen Mahsup</th>
+                    </tr>
+                    <tr class="table-secondary">
+                        <th class="text-center">(A)</th>
+                        <th class="text-center">(B)</th>
+                        <th class="text-center">(C)</th>
+                        <th class="text-center">(D)</th>
+                        <th class="text-center">(A - B)</th>
+                        <th class="text-center">(C - D)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var satir in Model.RaporSatirlari)
+                    {
+                        <tr>
+                            <td><strong>@satir.Tertip</strong></td>
+                            <td class="text-end">@satir.BaslangicOdenegi.ToString("N2", trCulture) ₺</td>
+                            <td class="text-end">@satir.FaaliyetToplami.ToString("N2", trCulture) ₺</td>
+                            <td class="text-end">@satir.GonderilenOdenekToplami.ToString("N2", trCulture) ₺</td>
+                            <td class="text-end">@satir.HarcamaToplami.ToString("N2", trCulture) ₺</td>
+                            <td class="text-end">@satir.KullanilabilecekOdenek.ToString("N2", trCulture) ₺</td>
+                            <td class="text-end">@satir.BeklenenHarcamalar.ToString("N2", trCulture) ₺</td>
+                            <td class="text-center no-print">
+                                <a asp-action="TertipDetay" asp-controller="Butce"
+                                   asp-route-tertip="@satir.Tertip" asp-route-yil="@Model.SecilenYil"
+                                   class="btn btn-sm btn-info" title="Bu Tertipin Detaylarını Gör">
+                                    <i class="fas fa-search-plus"></i> Detay
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot class="table-dark fw-bold">
+                    <tr>
+                        <td>@Model.GenelToplam.Tertip</td>
+                        <td class="text-end">@Model.GenelToplam.BaslangicOdenegi.ToString("N2", trCulture) ₺</td>
+                        <td class="text-end">@Model.GenelToplam.FaaliyetToplami.ToString("N2", trCulture) ₺</td>
+                        <td class="text-end">@Model.GenelToplam.GonderilenOdenekToplami.ToString("N2", trCulture) ₺</td>
+                        <td class="text-end">@Model.GenelToplam.HarcamaToplami.ToString("N2", trCulture) ₺</td>
+                        <td class="text-end">@Model.GenelToplam.KullanilabilecekOdenek.ToString("N2", trCulture) ₺</td>
+                        <td class="text-end">@Model.GenelToplam.BeklenenHarcamalar.ToString("N2", trCulture) ₺</td>
+                        <td class="no-print"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        Seçilen yıl (@Model.SecilenYil) için gösterilecek bütçe verisi bulunamadı. Lütfen "Genel Bütçe" tablosuna ilgili yıl için başlangıç ödeneklerini giriniz.
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        // Sayfa yüklendiğinde body etiketine 'sidebar-collapse' class'ını ekliyoruz.
+        $(document).ready(function () {
+            $('body').addClass('sidebar-collapse');
+        });
+    </script>
+    <style>
+        /* Yazdırma sırasında yıl seçim formunu gizle */
+        @@media print {
+            .no-print {
+                display: none !important;
+            }
+
+            body {
+                margin: 1cm;
+            }
+            /* Yazdırma kenar boşlukları */
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #dee2e6 !important;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+            /* Başlığı küçült ve ortala */
+            hr {
+                display: none;
+            }
+            /* Çizgiyi gizle */
+        }
+    </style>
+}

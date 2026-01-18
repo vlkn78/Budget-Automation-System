@@ -1,0 +1,157 @@
+﻿@model ProjeAyuDeneme.ViewModels.FuarlarViewModel
+
+@{
+    ViewData["Title"] = "Yeni Fuar Kaydı Ekle";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <form asp-action="FuarEkle" method="post">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h3 class="card-title">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="OfisId"></label>
+                                <select asp-for="OfisId" class="form-select" asp-items="Model.OfisListesi">
+                                    <option value="">- Lütfen Bir Ofis Seçiniz -</option>
+                                </select>
+                                <span asp-validation-for="OfisId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Ulke"></label>
+                                <input asp-for="Ulke" class="form-control" />
+                                <span asp-validation-for="Ulke" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="FuarAd"></label>
+                        <input asp-for="FuarAd" class="form-control" />
+                        <span asp-validation-for="FuarAd" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Tarih"></label>
+                                <input asp-for="Tarih" type="date" class="form-control" />
+                                <span asp-validation-for="Tarih" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Tertip"></label>
+                                <select asp-for="Tertip" class="form-select" asp-items="Model.TertipListesi">
+                                    <option value="">- Lütfen Bir Tertip Seçiniz -</option>
+                                </select>
+                                <span asp-validation-for="Tertip" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <!-- DÜZELTME: EKSİK ALANLARIN TAMAMI EKLENDİ -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Etkinlik"></label>
+                                <input asp-for="Etkinlik" class="form-control" />
+                                <span asp-validation-for="Etkinlik" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Statu"></label>
+                                <input asp-for="Statu" class="form-control" />
+                                <span asp-validation-for="Statu" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Odul"></label>
+                                <input asp-for="Odul" class="form-control" />
+                                <span asp-validation-for="Odul" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label asp-for="Haber"></label>
+                                <input asp-for="Haber" class="form-control" />
+                                <span asp-validation-for="Haber" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- EKSİK ALANLARIN SONU -->
+
+                    <hr />
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label asp-for="KatilimSayisi"></label>
+                                <input asp-for="KatilimSayisi" type="number" class="form-control" />
+                                <span asp-validation-for="KatilimSayisi" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label asp-for="StandM2"></label>
+                                <input asp-for="StandM2" class="form-control" />
+                                <span asp-validation-for="StandM2" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label asp-for="Degeri"></label>
+                                <input asp-for="Degeri" id="degeri-maskeli" class="form-control" />
+                                <span asp-validation-for="Degeri" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Degerlendirme"></label>
+                        <textarea asp-for="Degerlendirme" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Degerlendirme" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary">Fuar Kaydını Oluştur</button>
+                    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Sadece AutoNumeric script'ini bırakıyoruz. Hata veren validation script'lerini sildik. -->
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            new AutoNumeric('#degeri-maskeli', {
+                currencySymbol: ' ₺',
+                currencySymbolPlacement: 's',
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                unformatOnSubmit: true
+            });
+        });
+    </script>
+}

@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ProjeAyuDeneme.Models.Reklam>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Reklam Faaliyetleri Listesi";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="ReklamEkle" class="btn btn-primary">Yeni Reklam Ekle</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Ofis Adı</th>
+            <th>Mecra</th>
+            <th>Dönem</th>
+            <th class="text-end">Maliyet</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Ofis.Ad</td>
+                <td>@item.Mecra</td>
+                <td>@item.Donem</td>
+                <td class="text-end">@item.Degeri.ToString("C", trCulture)</td>
+                <td class="text-end">                
+                <a asp-action="ReklamDetay" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detay</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

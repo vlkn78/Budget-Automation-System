@@ -1,0 +1,105 @@
+﻿@model ProjeAyuDeneme.ViewModels.HarcamaRaporuViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Harcama Detay Raporu";
+    var trCulture = new CultureInfo("tr-TR");
+}
+<!-- ARAMA FORMU -->
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card card-primary card-outline mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Arama Kriterleri</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="HarcamaRaporu" method="post">
+
+                    <!-- Ofis Dropdown -->
+                    <div class="mb-3">
+                        <label asp-for="SecilenOfisId" class="form-label"></label>
+                        <select asp-for="SecilenOfisId" class="form-select w-50" asp-items="Model.OfisListesi">
+                            <option value="">Tüm Ofisler</option>
+                        </select>
+                    </div>
+
+                    <!-- Tertip Dropdown -->
+                    <div class="mb-3">
+                        <label asp-for="SecilenTertip" class="form-label"></label>
+                        <select asp-for="SecilenTertip" class="form-select w-50" asp-items="Model.TertipListesi">
+                            <option value="">Tüm Tertip Kodları</option>
+                        </select>
+                    </div>
+
+                    <!-- Listele Butonu -->
+                    <div class="mt-4 text-center">
+                        <button type="submit" class="btn btn-primary">Listele</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        @if (Model.SonucListesi.Any())
+        {
+            <div class="card card-primary card-outline mb-4">
+                <div class="card-header">
+                    <h5 class="card-title">Arama Sonuçları</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tarih</th>
+                                <th>Tertip</th>
+                                <th class="text-end">Ödenek Tutarı</th>
+                                <th class="text-end">Harcama Toplamı</th>
+                                <th class="text-end">Kalan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- ANA DÖNGÜ: Her bir ödenek için -->
+                            @foreach (var odenek in Model.SonucListesi)
+                            {
+                                <!-- 1. Ödeneğin Ana (Özet) Satırı -->
+                                <tr class="table-primary fw-bold">
+                                    <td>@odenek.Tarih.ToString("dd.MM.yyyy")</td>
+                                    <td>@odenek.Tertip</td>
+                                    <td class="text-end">@odenek.OdenekTutari.ToString("C", trCulture)</td>
+                                    <td class="text-end">@odenek.HarcamaToplami.ToString("C", trCulture)</td>
+                                    <td class="text-end">@odenek.KalanTutar.ToString("C", trCulture)</td>
+                                </tr>
+
+                                <!-- 2. Harcamaların Detay Satırları -->
+                                @foreach (var harcama in odenek.Harcamalar)
+                                {
+                                    <!-- DÜZELTME: Daha açık bir arka plan rengi için 'table-light' kullandık -->
+                                    <tr class="table-light">
+                                        <!-- Harcama tarihi, Ödenek tarihi ile aynı sütunda -->
+                                        <td class="ps-4">@harcama.Tarih.ToString("dd.MM.yyyy")</td>
+                                        <td></td>
+                                        <td></td>
+                                        <!-- Harcama tutarı, Harcama Toplamı ile aynı sütunda -->
+                                        <td class="text-end">@harcama.Tutar.ToString("n2", trCulture) ₺</td>
+                                        <td style="text-align:center"><a asp-action="HarcamaDuzenle" asp-controller="Harcamalar" asp-route-id="@harcama.Id" class="btn btn-link mb-2"> <i class="fas fa-edit"></i> Düzenle </a></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-info">
+                Lütfen arama yapmak için yukarıdaki kriterleri seçip "Listele" butonuna basınız.
+            </div>
+        }
+    </div>
+</div>

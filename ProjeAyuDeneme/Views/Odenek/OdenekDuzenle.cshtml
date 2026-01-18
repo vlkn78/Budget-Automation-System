@@ -1,0 +1,75 @@
+﻿@model ProjeAyuDeneme.Models.Odenek
+
+@{
+    ViewData["Title"] = "Ödenek Düzenle";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Ödenek Ekle</h5>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+
+        <form asp-action="OdenekDuzenle" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="OfisId" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="Tarih" />
+
+            <div class="mb-3">
+                <label class="form-label">Ofis Adı (Değiştirilemez)</label>
+                <input asp-for="Ofis.Ad" class="form-control" readonly />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Tertip" class="form-label"></label>
+                <input asp-for="Tertip" class="form-control" />
+                <span asp-validation-for="Tertip" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Tutar" class="form-label"></label>
+                <input asp-for="Tutar" id="tutar-maskeli" class="form-control" />
+            
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                <a asp-action="Index" class="btn btn-secondary">İptal</a>
+            </div>
+        </form>
+    
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        // Bu satır, client-side validation betiklerini sayfaya ekler.
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function(e) {
+            // 'tutar-maskeli' ID'sine sahip input'u bul ve ayarları uygula
+            new AutoNumeric('#tutar-maskeli', {
+                currencySymbol: ' ₺',               // Para birimi simgesi
+                currencySymbolPlacement: 's',       // Sona ekle (suffix)
+                decimalCharacter: ',',              // Ondalık ayırıcı
+                digitGroupSeparator: '.',           // Binlik ayırıcı
+                unformatOnSubmit: true              // Form gönderilirken formatı temizle (EN ÖNEMLİSİ)
+            });
+        });
+    </script>
+}

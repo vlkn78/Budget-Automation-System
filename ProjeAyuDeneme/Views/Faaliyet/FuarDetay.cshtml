@@ -1,0 +1,57 @@
+﻿@using System.Globalization
+@model ProjeAyuDeneme.Models.Fuar
+
+@{
+    ViewData["Title"] = "Fuar Detayı";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Model.FuarAd</h3>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Ofis</dt>
+            <dd class="col-sm-9">@Model.Ofis.Ad</dd>
+
+            <dt class="col-sm-3">Ülke</dt>
+            <dd class="col-sm-9">@Model.Ulke</dd>
+
+            <dt class="col-sm-3">Tarih</dt>
+            <dd class="col-sm-9">@Model.Tarih.ToString("dd.MM.yyyy")</dd>
+
+            <dt class="col-sm-3">Katılımcı Sayısı</dt>
+            <dd class="col-sm-9">@Model.KatilimSayisi</dd>
+
+            <dt class="col-sm-3">Stand (m²)</dt>
+            <dd class="col-sm-9">@Model.StandM2</dd>
+
+            <dt class="col-sm-3">Harcama Değeri</dt>
+            <dd class="col-sm-9">@Model.Degeri.ToString("C", new CultureInfo("tr-TR"))</dd>
+
+            <dt class="col-sm-3">Tertip</dt>
+            <dd class="col-sm-9">@Model.Tertip</dd>
+
+            <dt class="col-sm-3">Yapılan Etkinlik</dt>
+            <dd class="col-sm-9">@Model.Etkinlik</dd>
+
+            <dt class="col-sm-3">Alınan Ödül</dt>
+            <dd class="col-sm-9">@Model.Odul</dd>
+
+            <dt class="col-sm-3">Yapılan Haber Sayısı</dt>
+            <dd class="col-sm-9">@Model.Haber</dd>
+
+            <dt class="col-sm-3">Genel Değerlendirme</dt>
+            <dd class="col-sm-9">@Model.Degerlendirme</dd>
+
+            <dt class="col-sm-3">Kaydı Giren Kullanıcı</dt>
+            <dd class="col-sm-9">@Model.User.UserName</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="FuarListesi" class="btn btn-secondary">Listeye Geri Dön</a>
+    </div>
+</div>

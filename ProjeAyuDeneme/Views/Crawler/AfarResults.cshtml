@@ -1,0 +1,65 @@
+﻿@model List<projeAyuDeneme.Controllers.CrawlResultViewModel>
+
+@{
+    ViewData["Title"] = "Afar.com 'Türkiye' Arama Sonuçları";
+}
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i class="fas fa-plane-departure"></i> @ViewData["Title"] (Son 7 Gün)
+        </h3>
+    </div>
+    <div class="card-body p-0">
+        @if (Model == null || !Model.Any() || Model.First().Title.Contains("HATA"))
+        {
+            <div class="p-4">
+                <div class="alert alert-warning" role="alert">
+                    Afar.com'da son 7 gün içinde 'Türkiye' ile ilgili bir haber bulunamadı veya veri çekilemedi.
+                    @if (Model != null && Model.Any() && Model.First().Title.Contains("HATA"))
+                    {
+                        <hr>
+                        <p class="mb-0"><strong>Hata Detayı:</strong> @Model.First().Summary</p>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 10px">#</th>
+                        <th style="width: 120px">Tarih</th>
+                        <th>Başlık</th>
+                        <th>Özet</th>
+                    </tr>
+                </thead>
+                @{
+                    int counter = 1;
+                }
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr class="align-middle">
+                            <td>@(counter++).</td>
+                            <td><span class="badge text-bg-info">@item.Date</span></td>
+                            <td>
+                                <a href="@item.Url" target="_blank" style="text-decoration: none;">
+                                    <strong>@item.Title</strong>
+                                </a>
+                            </td>
+                            <td>
+                                @{
+                                    // Özeti 250 karaktere kısaltalım
+                                    var summary = item.Summary.Length > 250 ? item.Summary.Substring(0, 250) + "..." : item.Summary;
+                                }
+                                <small>@summary</small>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>

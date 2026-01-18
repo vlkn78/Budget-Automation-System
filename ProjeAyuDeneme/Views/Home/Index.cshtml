@@ -1,0 +1,138 @@
+﻿@model ProjeAyuDeneme.ViewModels.AnaSayfaViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Ana Sayfa - Dashboard";
+    var trCulture = new CultureInfo("tr-TR");
+    bool isAdminOrYonetici = User.IsInRole("Admin") || User.IsInRole("Yonetici");
+}
+
+
+<div class="row">
+    @if (isAdminOrYonetici)
+    {
+        <div class="col-lg-3 col-6">
+            <div class="small-box bg-warning"> <div class="inner"> <h3>@Model.OnayBekleyenSayisi</h3> <p>Onay Bekleyen Faaliyet</p> </div> <div class="icon"><i class="fas fa-exclamation-triangle"></i></div> <a asp-controller="Admin" asp-action="OnayBekleyenListesi" class="small-box-footer">Detaylar <i class="fas fa-arrow-circle-right"></i></a> </div>
+        </div>
+    }
+    else
+    {
+        <div class="col-lg-3 col-6"> <div class="small-box bg-light"> <div class="inner"> <h3>&nbsp;</h3> <p>Faaliyetlerim</p> </div> <div class="icon"><i class="fas fa-tasks"></i></div> <span class="small-box-footer">&nbsp;</span> </div> </div>
+    }
+    <div class="col-lg-3 col-6"> <div class="small-box bg-info"> <div class="inner"> <h3>@Model.ToplamOfisSayisi</h3> <p>Toplam Ofis Sayısı</p> </div> <div class="icon"><i class="fas fa-building"></i></div> <span class="small-box-footer">&nbsp;</span> </div> </div>
+    <div class="col-lg-3 col-6"> <div class="small-box bg-success"> <div class="inner"> <h3>@Model.ToplamKullaniciSayisi</h3> <p>Toplam Kullanıcı Sayısı</p> </div> <div class="icon"><i class="fas fa-users"></i></div> @if(User.IsInRole("Admin")){
+    <a asp-controller="Admin" asp-action="KullaniciListesi" class="small-box-footer">Yönet <i class="fas fa-arrow-circle-right"></i></a>
+        } else
+    {
+
+        <span class="small-box-footer">&nbsp;</span>
+    }
+ </div> </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>@Model.BuYilkiToplamHarcama.ToString("C0", trCulture)</h3>
+                <p>Bu Yılki Toplam Harcama</p>                
+                    <span class="badge bg-light text-dark"></span>               
+               </div>
+            <div class="icon"><i class="fas fa-lira-sign"></i></div>
+            @if (Model.GonderilenOdenekBuYil > 0)
+                {
+            <span class="small-box-footer text-white"> Kullanım: @Model.HarcamaButceOrani% </span>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="row">
+   
+
+    <div class="row">
+        <div class="col-md-6"> <div class="card card-danger"> <div class="card-header"> <h3 class="card-title">Tertip Harcama Dağılımı (@DateTime.Now.Year)</h3> </div> <div class="card-body"> <canvas id="tertipPieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas> <div id="tertipPieChartNoData" class="text-muted text-center p-4" style="display: none;">Veri yok.</div> </div> </div> </div>
+        <div class="col-md-6"> <div class="card card-success"> <div class="card-header"> <h3 class="card-title">Ofis Harcamaları (@DateTime.Now.Year)</h3> </div> <div class="card-body"> <canvas id="ofisBarChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas> <div id="ofisBarChartNoData" class="text-muted text-center p-4" style="display: none;">Veri yok.</div> </div> </div> </div>
+    </div>
+    <hr />
+    <div class="col-md-4">
+        <div class="card card-danger card-outline mb-4 h-100">
+            <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-hourglass-half me-1"></i> Süresi Yaklaşan Ödenekler</h3>
+            </div>
+            <div class="card-body p-0">
+                @if (Model.OdenekUyarilari.Any())
+                {
+                    <ul class="list-group list-group-flush">
+                        @foreach (var uyari in Model.OdenekUyarilari)
+                        {
+                            <li class="list-group-item">
+                                <span class="badge @(uyari.UyariSeviyesi == "kritik" ? "bg-danger" : "bg-warning") float-end">@uyari.KalanGun gün</span>
+                                <strong>@uyari.OfisAdi</strong> (@uyari.Tertip)
+                                <br />
+                                <small class="text-muted">Kalan: @uyari.KalanTutar.ToString("C", trCulture)</small>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="p-3 text-muted">Süresi yaklaşan ödenek bulunmamaktadır.</p>
+                }
+            </div>
+            <!-- Gerekirse bir footer eklenebilir -->
+            <!-- <div class="card-footer text-center"></div> -->
+        </div>
+    </div>
+    <!-- TCMB Kurları -->
+    <div class="col-md-4">
+        <div class="card card-primary card-outline mb-4 h-100">
+            <div class="card-header"> <h3 class="card-title"> <i class="fas fa-chart-line me-1"></i> TCMB Kurlar (@DateTime.Now.ToString("dd.MM.yyyy")) </h3> </div>
+            <div class="card-body p-0"> @if (Model.KurListesi.Any()) {
+            <table class="table table-sm table-hover"><thead><tr><th>Kod</th><th class="text-end">Alış</th><th class="text-end">Satış</th></tr></thead><tbody> @foreach (var kur in Model.KurListesi) {
+            <tr><td><strong>@kur.Kod</strong></td><td class="text-end">@kur.Alis.ToString("N4", trCulture) ₺</td><td class="text-end">@kur.Satis.ToString("N4", trCulture) ₺</td></tr>
+                        }
+ </tbody></table>
+                        } else
+            {
+
+                <div class="alert alert-warning m-3">Kur bilgileri alınamıyor.</div>
+            }
+ </div>
+            <div class="card-footer text-center"><small class="text-muted">Kaynak: TCMB</small></div>
+        </div>
+    </div>
+
+   
+    @if (isAdminOrYonetici && Model.SonOnayBekleyenler.Any())
+    {
+        <div class="col-md-4"> <div class="card card-warning card-outline h-100"> <div class="card-header"> <h3 class="card-title"><i class="fas fa-clock me-1"></i> Son Onay Bekleyenler</h3> </div> <div class="card-body p-0"> <ul class="list-group list-group-flush"> @foreach (var item in Model.SonOnayBekleyenler) {
+        <li class="list-group-item"> <a href="@item.DetayLinki" target="_blank" class="text-decoration-none text-dark"> <small class="badge bg-secondary float-end">@item.OfisAdi</small> @item.FaaliyetTuru (@item.Tarih.ToString("dd.MM")) <br /> <small class="text-muted">@item.Degeri.ToString("C", trCulture)</small> </a> </li>
+    }
+ </ul> </div> <div class="card-footer text-center"> <a asp-controller="Admin" asp-action="OnayBekleyenListesi">Tümünü Gör</a> </div> </div> </div>
+        }
+</div>
+
+
+@section Scripts {
+    <script src="~/adminlte/plugins/chart.js/Chart.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            const tertipHarcamaJson = @Html.Raw(Model.TertipHarcamaJson ?? "[]");
+            const ofisHarcamaJson = @Html.Raw(Model.OfisHarcamaJson ?? "[]");
+            console.log('Tertip Harcama Verisi:', tertipHarcamaJson);
+            console.log('Ofis Harcama Verisi:', ofisHarcamaJson);
+
+            const pieChartCanvas = document.getElementById('tertipPieChart');
+            if (pieChartCanvas && tertipHarcamaJson && tertipHarcamaJson.length > 0) {
+                /* ... Pasta grafik kodu ... */
+                 const pieCtx = pieChartCanvas.getContext('2d'); const tertipLabels = tertipHarcamaJson.map(item => item.Label); const tertipValues = tertipHarcamaJson.map(item => item.Value); const tertipColors = ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de']; const pieData = { labels: tertipLabels, datasets: [{ data: tertipValues, backgroundColor: tertipColors }] }; const pieOptions = { maintainAspectRatio: false, responsive: true }; new Chart(pieCtx, { type: 'pie', data: pieData, options: pieOptions });
+            } else { $('#tertipPieChart').hide(); $('#tertipPieChartNoData').show(); }
+
+            const barChartCanvas = document.getElementById('ofisBarChart');
+            if(barChartCanvas && ofisHarcamaJson && ofisHarcamaJson.length > 0) {
+                /* ... Çubuk grafik kodu ... */
+                const barCtx = barChartCanvas.getContext('2d'); const ofisLabels = ofisHarcamaJson.map(item => item.Label); const ofisValues = ofisHarcamaJson.map(item => item.Value); const barChartData = { labels: ofisLabels, datasets: [{ label: 'Toplam Harcama (₺)', backgroundColor: 'rgba(60,141,188,0.9)', data: ofisValues }] }; const barChartOptions = { responsive: true, maintainAspectRatio: false, scales: { y: { ticks: { beginAtZero: true, callback: function(value, index, values) { return value.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0, maximumFractionDigits: 0 }); } } } }, plugins: { tooltip: { callbacks: { label: function(context) { let label = context.dataset.label || ''; if (label) { label += ': '; } if (context.parsed.y !== null) { label += context.parsed.y.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY' }); } return label; } } } } }; new Chart(barCtx, { type: 'bar', data: barChartData, options: barChartOptions });
+            } else { $('#ofisBarChart').hide(); $('#ofisBarChartNoData').show(); }
+        });
+    </script>
+}
+
+

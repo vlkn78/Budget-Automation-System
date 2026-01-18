@@ -1,0 +1,31 @@
+﻿@{
+    // ParentLayout'u kontrol etme mantığı aynı kalabilir veya doğrudan ana layout'a bağlanabilir.
+    // Biz doğrudan ana AdminLTE layout'una bağlıyoruz.
+    Layout = "/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-3">
+        <!-- Sol taraftaki Yönetim Menüsü (_ManageNav) -->
+        <div class="card card-primary card-outline sticky-top">
+            <div class="card-header">
+                <h3 class="card-title">Hesap Ayarları</h3>
+            </div>
+            <div class="card-body p-0">
+                <partial name="_ManageNav" />
+            </div>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <!-- Sağ taraftaki asıl sayfa içeriği (Index.cshtml, ChangePassword.cshtml vb.) -->
+        <div class="card card-primary card-outline">
+            <div class="card-body">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @RenderSection("Scripts", required: false)
+}

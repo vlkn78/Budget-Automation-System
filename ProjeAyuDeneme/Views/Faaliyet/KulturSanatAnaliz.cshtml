@@ -1,0 +1,79 @@
+﻿@model ProjeAyuDeneme.ViewModels.KulturSanatAnalizViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Kültür-Sanat Faaliyetleri Analizi";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>@ViewData["Title"]</h1>
+</div>
+<hr />
+
+@if (Model.ToplamEtkinlikSayisi > 0)
+{
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- ANA GÖSTERGELER KARTI -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Genel Performans</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 border-end">
+                            <h3 class="fw-bold mb-0">@Model.ToplamEtkinlikSayisi</h3>
+                            <span class="text-muted">Toplam Etkinlik</span>
+                        </div>
+                        <div class="col-6">
+                            <h3 class="fw-bold mb-0">@Model.ToplamMaliyet.ToString("C0", trCulture)</h3>
+                            <span class="text-muted">Toplam Maliyet</span>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row text-center mt-4">
+                        <div class="col-6 border-end">
+                            <h3 class="fw-bold mb-0">@Model.ToplamKatilimci.ToString("N0", trCulture)</h3>
+                            <span class="text-muted">Toplam Katılımcı</span>
+                        </div>
+                        <div class="col-6">
+                            <h3 class="fw-bold mb-0">@Model.ToplamHaberSayisi.ToString("N0", trCulture)</h3>
+                            <span class="text-muted">Toplam Haber Sayısı</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORTALAMALAR KARTI -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Analitik Değerler</h3>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span>Etkinlik Başına Ortalama Maliyet</span>
+                        <span class="fw-bold">@Model.EtkinlikBasinaOrtalamaMaliyet.ToString("C", trCulture)</span>
+                    </div>
+                    <div class="progress mb-3" style="height: 5px;">
+                        <div class="progress-bar bg-primary" role="progressbar" style="width: 65%"></div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <span>Katılımcı Başına Ortalama Maliyet</span>
+                        <span class="fw-bold">@Model.KatilimciBasinaOrtalamaMaliyet.ToString("C", trCulture)</span>
+                    </div>
+                    <div class="progress" style="height: 5px;">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 40%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        Henüz analiz edilecek kültür-sanat kaydı bulunmamaktadır.
+    </div>
+}

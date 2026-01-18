@@ -1,0 +1,91 @@
+﻿@model IEnumerable<ProjeAyuDeneme.ViewModels.OnayBekleyenFaaliyetViewModel>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Onay Bekleyen Faaliyetler";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<h6>@ViewData["Title"]</h6>
+<p>Yönetici onayı bekleyen tüm faaliyet kayıtları aşağıda listelenmiştir.</p>
+
+
+@if (Model.Any())
+{
+    <table class="table table-hover table-bordered">
+        <thead class="table-light">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.First().FaaliyetTuru)</th>
+                <th>@Html.DisplayNameFor(model => model.First().OfisAdi)</th>
+                <th>@Html.DisplayNameFor(model => model.First().KaydedenKullanici)</th>
+                <th>@Html.DisplayNameFor(model => model.First().Tarih)</th>
+                <th class="text-end">@Html.DisplayNameFor(model => model.First().Degeri)</th>
+                <th>@Html.DisplayNameFor(model => model.First().OnayDurumu)</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @* Faaliyet türüne göre ikon ekleyebiliriz *@
+                        @if (item.FaaliyetTuru == "Fuar")
+                        {
+                            <i class="fas fa-flag text-primary me-2"></i>
+                        }
+                        else if (item.FaaliyetTuru == "Ağırlama")
+                        {
+
+                            <i class="fas fa-utensils text-success me-2"></i>
+                        }
+                        else if (item.FaaliyetTuru == "Kültür-Sanat")
+                        {
+
+                            <i class="fas fa-palette text-info me-2"></i>
+                        }
+                        else if (item.FaaliyetTuru == "Reklam")
+                        {
+
+                            <i class="fas fa-bullhorn text-warning me-2"></i>
+                        }
+                        else if (item.FaaliyetTuru == "Sektör İşbirliği")
+                        {
+
+                            <i class="fas fa-handshake text-secondary me-2"></i>
+                        }
+                        @item.FaaliyetTuru
+                    </td>
+                    <td>@item.OfisAdi</td>
+                    <td>@item.KaydedenKullanici</td>
+                    <td>@item.Tarih.ToString("dd.MM.yyyy")</td>
+                    <td class="text-end">@item.Degeri.ToString("C", trCulture)</td>
+                    <td><span class="badge bg-warning text-dark">@item.OnayDurumu</span></td>
+                    <td class="text-center">
+                        <div class="btn-group btn-group-sm" role="group">
+                            <a href="@item.DetayLinki" target="_blank" class="btn btn-info" title="Detayı Yeni Sekmede Aç"><i class="fas fa-eye"></i> Detay</a>
+                            -
+                            <!-- Onayla Butonu (POST işlemi yapacak) -->
+                            <form asp-action="FaaliyetOnayla" asp-controller="Admin" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <input type="hidden" name="faaliyetTuru" value="@item.FaaliyetTuru" />
+                                <button type="submit" class="btn btn-success" title="Onayla"><i class="fas fa-check"></i> Onayla</button>
+                            </form>
+                            -
+                            <!-- Reddet Butonu (POST işlemi yapacak) -->
+                            <form asp-action="FaaliyetReddet" asp-controller="Admin" method="post" class="d-inline">
+                                <input type="hidden" name="id" value="@item.Id" />
+                                <input type="hidden" name="faaliyetTuru" value="@item.FaaliyetTuru" />
+                                <button type="submit" class="btn btn-danger" title="Reddet"><i class="fas fa-times"></i> Reddet</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">Onay bekleyen herhangi bir faaliyet kaydı bulunmamaktadır.</div>
+}

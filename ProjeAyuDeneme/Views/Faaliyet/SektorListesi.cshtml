@@ -1,0 +1,42 @@
+﻿@model IEnumerable<ProjeAyuDeneme.Models.Sektor>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Sektör İşbirliği Listesi";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="SektorEkle" class="btn btn-primary">Yeni Sektör Kaydı Ekle</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Ofis Adı</th>
+            <th>Kurum</th>
+            <th>İşbirliği Türü</th>
+            <th>Dönem</th>
+            <th class="text-end">Maliyet</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Ofis.Ad</td>
+                <td>@item.Kurum</td>
+                <td>@item.Tur</td>
+                <td>@item.Donem</td>
+                <td class="text-end">@item.Degeri.ToString("C", trCulture)</td>
+                <td class="text-end">
+                    @* Buraya ileride Detay, Düzenle ve Sil butonları eklenebilir *@
+                    <a asp-action="SektorDetay" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detay</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

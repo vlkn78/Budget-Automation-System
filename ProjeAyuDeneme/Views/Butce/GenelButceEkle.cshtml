@@ -1,0 +1,70 @@
+﻿@model ProjeAyuDeneme.ViewModels.GenelButceEkleViewModel
+
+@{
+    ViewData["Title"] = "Yeni Yıl Başlangıç Bütçesi Ekle";
+}
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <form asp-action="GenelButceEkle" method="post">
+            <div class="card card-success">
+                <div class="card-header">
+                    <h3 class="card-title">@ViewData["Title"]</h3>
+                </div>
+                <div class="card-body">
+
+                    <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+                    }
+
+
+                    <div class="mb-3">
+                        <label asp-for="Yil"></label>
+                        <input asp-for="Yil" type="number" class="form-control" />
+                        <span asp-validation-for="Yil" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Tertip"></label>
+                        <select asp-for="Tertip" class="form-select" asp-items="Model.TertipListesi">
+                            <option value="">- Lütfen Bir Tertip Seçiniz -</option>
+                        </select>
+                        <span asp-validation-for="Tertip" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="BaslangicTutari"></label>
+                        <input asp-for="BaslangicTutari" id="tutar-maskeli" class="form-control" />
+                        <span asp-validation-for="BaslangicTutari" class="text-danger"></span>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success">Başlangıç Bütçesini Kaydet</button>
+                    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">İptal</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Sadece AutoNumeric script'ini bırakıyoruz. Hata veren validation script'lerini sildik. -->
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            new AutoNumeric('#tutar-maskeli', {
+                currencySymbol: ' ₺',
+                currencySymbolPlacement: 's',
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                unformatOnSubmit: true
+            });
+        });
+    </script>
+}

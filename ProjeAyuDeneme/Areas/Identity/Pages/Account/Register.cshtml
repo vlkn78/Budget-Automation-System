@@ -1,0 +1,68 @@
+﻿@page
+@model RegisterModel
+
+@{
+    ViewData["Title"] = "Yeni Üyelik Kaydı";
+    // Artık Layout = "_Layout.cshtml" satırına gerek yok, çünkü _ViewStart.cshtml'de tanımladık.
+}
+
+<div class="card">
+    <div class="card-body register-card-body">
+        <p class="register-box-msg">Yeni bir üyelik kaydı yapın</p>
+
+  
+        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+
+            <div asp-validation-summary="All" class="text-danger mb-3" role="alert"></div>
+
+  
+            <div class="input-group mb-3">
+                <input asp-for="Input.Email" class="form-control" placeholder="E-Posta Adresi" />
+                <div class="input-group-text"><span class="bi bi-envelope"></span></div>
+            </div>
+            <span asp-validation-for="Input.Email" class="text-danger d-block mb-3"></span>
+
+            <div class="input-group mb-3">
+                <input asp-for="Input.AdSoyad" class="form-control" placeholder="Adınız Soyadınız" />
+                <div class="input-group-text"><span class="bi bi-person"></span></div>
+            </div>
+            <span asp-validation-for="Input.AdSoyad" class="text-danger d-block mb-3"></span>
+
+            <div class="input-group mb-3">
+                <input asp-for="Input.Birim" class="form-control" placeholder="Çalıştığı Birim" />
+                <div class="input-group-text"><span class="bi bi-diagram-3"></span></div>
+            </div>
+            <span asp-validation-for="Input.Birim" class="text-danger d-block mb-3"></span>
+
+            <div class="input-group mb-3">
+                <input asp-for="Input.Pozisyon" class="form-control" placeholder="Pozisyon / Ünvan" />
+                <div class="input-group-text"><span class="bi bi-briefcase"></span></div>
+            </div>
+            <span asp-validation-for="Input.Pozisyon" class="text-danger d-block mb-3"></span>
+
+            <div class="input-group mb-3">
+                <input asp-for="Input.Password" class="form-control" placeholder="Parola" />
+                <div class="input-group-text"><span class="bi bi-lock"></span></div>
+            </div>
+            <span asp-validation-for="Input.Password" class="text-danger d-block mb-3"></span>
+
+            <div class="input-group mb-3">
+                <input asp-for="Input.ConfirmPassword" class="form-control" placeholder="Parola Tekrarı" />
+                <div class="input-group-text"><span class="bi bi-lock"></span></div>
+            </div>
+            <span asp-validation-for="Input.ConfirmPassword" class="text-danger d-block mb-3"></span>
+
+            <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary btn-block">Kaydol</button>
+            </div>
+        </form>
+
+        <p class="mb-0 mt-3">
+            <a asp-page="./Login" asp-route-returnUrl="@Model.ReturnUrl" class="text-center">Zaten üyeyim</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

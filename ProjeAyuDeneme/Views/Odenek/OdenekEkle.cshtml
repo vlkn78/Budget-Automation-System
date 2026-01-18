@@ -1,0 +1,77 @@
+﻿@model ProjeAyuDeneme.ViewModels.OdenekEkleViewModel
+
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Ödenek Ekle</h5>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+
+                <form asp-action="OdenekEkle" method="post">
+                    <div asp-validation-summary="All" class="text-danger"></div>
+
+                    <div class="mb-3">
+                        <label asp-for="OfisId" class="form-label">Ofis</label>
+                        <select asp-for="OfisId" class="form-select" asp-items="Model.OfisListesi">
+                            <option value="">- Ofis Seçiniz -</option>
+                        </select>
+                        <span asp-validation-for="OfisId" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Tertip" class="form-label"></label>
+                        <select asp-for="Tertip" class="form-select" asp-items="Model.TertipListesi">
+                            <option value="">- Tertip Seçiniz -</option>
+                        </select>
+                        <span asp-validation-for="Tertip" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Tarih" class="form-label"></label>
+                        <input asp-for="Tarih" type="date" class="form-control" />
+                        <span asp-validation-for="Tarih" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Tutar" class="form-label"></label>
+                        <input asp-for="Tutar" id="tutar-maskeli" class="form-control" />
+                        <span asp-validation-for="Tutar" class="text-danger"></span>
+                    </div>                    
+
+                    <div class="form-group mt-4">
+                        <button type="submit" class="btn btn-primary">Ödeneği Kaydet</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    <!-- DÜZELTME: AutoNumeric script'ini bu sayfaya da ekliyoruz -->
+    <!-- 1. AutoNumeric kütüphanesini internet üzerinden (CDN) sayfamıza ekliyoruz. -->
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+
+    <!-- 2. Tutar alanına para formatı maskesini uygulayan script. -->
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function(e) {
+            // 'tutar-maskeli' ID'sine sahip input'u bul ve ayarları uygula
+            new AutoNumeric('#tutar-maskeli', {
+                currencySymbol: ' ₺',
+                currencySymbolPlacement: 's',
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                unformatOnSubmit: true // Bu, kayıt işleminin hatasız çalışmasını sağlar.
+            });
+        });
+    </script>
+}

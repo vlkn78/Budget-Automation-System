@@ -1,0 +1,130 @@
+﻿@model ProjeAyuDeneme.ViewModels.HarcamaEkleViewModel
+
+@{
+    ViewData["Title"] = "Yeni Harcama Ekle";
+}
+
+
+
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Harcama Ekle</h5>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+        <form asp-action="HarcamaEkle" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- 1. OFİS DROPDOWN -->
+                    <div class="mb-3">
+                        <label asp-for="OfisId" class="form-label fw-bold"></label>
+                <!-- JavaScript'in bu elemanı bulabilmesi için bir ID veriyoruz -->
+                        <select asp-for="OfisId" id="ofisDropdown" class="form-select w-50" asp-items="Model.OfisListesi">
+                    <option value="">- Ofis Seçiniz -</option>
+                </select>
+                <span asp-validation-for="OfisId" class="text-danger"></span>
+            </div>
+
+            <!-- 2. TERTİP DROPDOWN -->
+            <div class="mb-3">
+                        <label asp-for="Tertip" class="form-label fw-bold"></label>
+                <!-- JavaScript'in bu elemanı bulabilmesi için bir ID veriyoruz -->
+                        <select asp-for="Tertip" id="tertipDropdown" class="form-select w-25" asp-items="Model.TertipListesi">
+                    <option value="">- Tertip Seçiniz -</option>
+                </select>
+                <span asp-validation-for="Tertip" class="text-danger"></span>
+            </div>
+
+            <!-- 3. ÖDENEK DROPDOWN (Başlangıçta boş ve pasif) -->
+            <div class="mb-3">
+                        <label asp-for="OdenekId" class="form-label fw-bold"></label>
+                <!-- Bu dropdown, AJAX ile doldurulacak -->
+                        <select asp-for="OdenekId" id="odenekDropdown" class="form-select w-50" disabled>
+                    <option value="">- Önce Ofis ve Tertip Seçiniz -</option>
+                </select>
+                <span asp-validation-for="OdenekId" class="text-danger"></span>
+            </div>
+
+            <!-- Diğer Form Alanları -->
+            <div class="mb-3">
+                        <label asp-for="Tarih" class="form-label fw-bold"></label>
+                        <input asp-for="Tarih" type="date" class="form-control w-50" />
+                <span asp-validation-for="Tarih" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                        <label asp-for="Tutar" class="form-label fw-bold"></label>
+                        <input asp-for="Tutar" id="tutar-maskeli" class="form-control" />
+                        <span asp-validation-for="Tutar" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <button type="submit" class="btn btn-primary">Harcamayı Kaydet</button>
+            </div>
+        </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <!-- SADECE GEREKLİ OLAN SCRIPTLERİ BIRAKTIK -->
+    <!-- 1. AutoNumeric kütüphanesini ekliyoruz -->
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+
+    <!-- 2. AutoNumeric ve AJAX kodlarını birleştiriyoruz -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            // AutoNumeric maskesini Tutar alanına uyguluyoruz.
+            // Bu, hem formatlama yapar hem de 'unformatOnSubmit' ile sunucuya temiz veri gönderir.
+            new AutoNumeric('#tutar-maskeli', {
+                currencySymbol: ' ₺',
+                currencySymbolPlacement: 's',
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                unformatOnSubmit: true // BU SATIR SAYESİNDE KAYIT ÇALIŞACAK!
+            });
+
+            // AJAX kodumuz eskisi gibi çalışmaya devam ediyor.
+            $("#ofisDropdown, #tertipDropdown").on("change", function () {
+                var ofisId = $("#ofisDropdown").val();
+                var tertip = $("#tertipDropdown").val();
+                if (ofisId && tertip) {
+                    $.ajax({
+                        url: '@Url.Action("GetOdenekler", "Harcamalar")',
+                        type: "GET",
+                        data: { ofisId: ofisId, tertip: tertip },
+                        success: function (data) {
+                            var odenekDropdown = $("#odenekDropdown");
+                            odenekDropdown.empty();
+                            odenekDropdown.append('<option value="">- Ödenek Seçiniz -</option>');
+                            odenekDropdown.prop("disabled", false);
+                            $.each(data, function (index, item) {
+                                odenekDropdown.append($('<option>', {
+                                    value: item.id,
+                                    text: item.text
+                                }));
+                            });
+                        }
+                    });
+                } else {
+                    var odenekDropdown = $("#odenekDropdown");
+                    odenekDropdown.empty();
+                    odenekDropdown.append('<option value="">- Önce Ofis ve Tertip Seçiniz -</option>');
+                    odenekDropdown.prop("disabled", true);
+                }
+            });
+        });
+    </script>
+}
+
+

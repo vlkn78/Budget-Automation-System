@@ -1,0 +1,66 @@
+﻿@model ProjeAyuDeneme.ViewModels.AgirlamaAnalizViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Ağırlama Faaliyetleri Analizi";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<h1>@ViewData["Title"]</h1>
+<p class="lead">Tüm ağırlama faaliyetlerine ilişkin özet ve analitik veriler.</p>
+<hr />
+
+@if (Model.ToplamAdet > 0)
+{
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <!-- ANA GÖSTERGELER KARTI -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3 class="card-title">Genel Performans</h3>
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-6 border-end">
+                            <h3 class="fw-bold mb-0">@Model.ToplamAdet</h3>
+                            <span class="text-muted">Toplam Ağırlama Sayısı</span>
+                        </div>
+                        <div class="col-6">
+                            <h3 class="fw-bold mb-0">@Model.ToplamMaliyet.ToString("C0", trCulture)</h3>
+                            <span class="text-muted">Toplam Maliyet</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ORTALAMALAR KARTI -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Analitik Değerler</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Farklı Şehir Sayısı
+                            <span class="badge bg-info rounded-pill fs-6">@Model.ToplamSehir</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Ağırlama Başına Ortalama Maliyet
+                            <span class="badge bg-primary rounded-pill fs-6">@Model.AgirlamaBasinaMaliyet.ToString("C", trCulture)</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Ağırlanan Kişi Başına Ortalama Maliyet
+                            <span class="badge bg-success rounded-pill fs-6">@Model.AgirlamaKisiBasiMaliyet.ToString("C", trCulture)</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        Henüz analiz edilecek ağırlama kaydı bulunmamaktadır.
+    </div>
+}

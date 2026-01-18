@@ -1,0 +1,201 @@
+﻿@model ProjeAyuDeneme.ViewModels.TertipDetayViewModel
+@using System.Globalization
+
+@{
+    ViewData["Title"] = $"Detay Raporu: {Model.Tertip} - {Model.Yil}";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3 no-print">
+    <h6>@ViewData["Title"]</h6>
+    <a asp-action="GenelButceRaporu" asp-route-yil="@Model.Yil" class="btn btn-secondary">Genel Rapora Dön</a>
+</div>
+<hr class="no-print" />
+
+<div id="printableArea">
+    <!-- Rapor Başlığı (Sadece yazdırma sırasında görünecek) -->
+    <div class="print-only mb-4 text-center">
+        <h2>Tertip Detay Raporu (@Model.Tertip - @Model.Yil)</h2>
+        <p>Tarih: @DateTime.Now.ToString("dd.MM.yyyy")</p>
+    </div>
+
+    <div class="row">
+        <!-- 1. Faaliyetler Listesi -->
+        <div class="col-md-12 mb-4">
+            <div class="card card-info card-outline">
+                <div class="card-header">
+                    <h3 class="card-title"> <i class="fas fa-tasks me-2"></i> Onaylanmış Faaliyet Kayıtları</h3>
+                    <div class="card-tools">
+                        <span class="badge bg-info">Toplam: @Model.ToplamFaaliyetTutari.ToString("C", trCulture)</span>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (!Model.Fuarlar.Any() && !Model.Agirlamalar.Any() && !Model.KulturSanatlar.Any() && !Model.Reklamlar.Any() && !Model.Sektorler.Any())
+                    {
+                        <p class="p-3 text-muted">Bu tertip ve yıla ait onaylanmış faaliyet kaydı bulunmamaktadır.</p>
+                    }
+                    else
+                    {
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Tür</th>
+                                    <th>Ofis</th>
+                                    <th>Açıklama/Ad</th>
+                                    <th>Tarih</th>
+                                    <th class="text-end">Değeri</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Fuarlar)
+                                {
+                                    <tr><td>Fuar</td><td>@item.Ofis.Ad</td><td>@item.FuarAd</td><td>@item.Tarih.ToString("dd.MM.yyyy")</td><td class="text-end">@item.Degeri.ToString("N2", trCulture) ₺</td></tr>
+                                }
+                                @foreach (var item in Model.Agirlamalar)
+                                {
+                                    <tr><td>Ağırlama</td><td>@item.Ofis.Ad</td><td>@item.Kurum</td><td>@item.Tarih.ToString("dd.MM.yyyy")</td><td class="text-end">@item.Degeri.ToString("N2", trCulture) ₺</td></tr>
+                                }
+                                @foreach (var item in Model.KulturSanatlar)
+                                {
+                                    <tr><td>Kültür-Sanat</td><td>@item.Ofis.Ad</td><td>@item.Etkinlik</td><td>@item.Tarih.ToString("dd.MM.yyyy")</td><td class="text-end">@item.Degeri.ToString("N2", trCulture) ₺</td></tr>
+                                }
+                                @foreach (var item in Model.Reklamlar)
+                                {
+                                    <tr><td>Reklam</td><td>@item.Ofis.Ad</td><td>@item.Mecra (@item.Donem)</td><td>-</td><td class="text-end">@item.Degeri.ToString("N2", trCulture) ₺</td></tr>
+                                }
+                                @foreach (var item in Model.Sektorler)
+                                {
+                                    <tr><td>Sektör</td><td>@item.Ofis.Ad</td><td>@item.Kurum (@item.Tur)</td><td>@item.Donem</td><td class="text-end">@item.Degeri.ToString("N2", trCulture) ₺</td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Gönderilen Ödenekler Listesi -->
+        <div class="col-md-6 mb-4">
+            <div class="card card-success card-outline">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-arrow-down me-2"></i> Gönderilen Ödenekler</h3>
+                    <div class="card-tools">
+                        <span class="badge bg-success">Toplam: @Model.ToplamOdenekTutari.ToString("C", trCulture)</span>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (!Model.Odenekler.Any())
+                    {
+                        <p class="p-3 text-muted">Bu tertip ve yıla ait gönderilen ödenek kaydı bulunmamaktadır.</p>
+                    }
+                    else
+                    {
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ofis</th>
+                                    <th>Tarih</th>
+                                    <th class="text-end">Tutar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Odenekler)
+                                {
+                                    <tr>
+                                        <td>@item.Ofis.Ad</td>
+                                        <td>@item.Tarih.ToString("dd.MM.yyyy")</td>
+                                        <td class="text-end">@item.Tutar.ToString("N2", trCulture) ₺</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Yapılan Harcamalar (Mahsuplar) Listesi -->
+        <div class="col-md-6 mb-4">
+            <div class="card card-danger card-outline">
+                <div class="card-header">
+                    <h3 class="card-title"><i class="fas fa-arrow-up me-2"></i> Yapılan Harcamalar (Mahsuplar)</h3>
+                    <div class="card-tools">
+                        <span class="badge bg-danger">Toplam: @Model.ToplamHarcamaTutari.ToString("C", trCulture)</span>
+                    </div>
+                </div>
+                <div class="card-body p-0">
+                    @if (!Model.Harcamalar.Any())
+                    {
+                        <p class="p-3 text-muted">Bu tertip ve yıla ait harcama (mahsup) kaydı bulunmamaktadır.</p>
+                    }
+                    else
+                    {
+                        <table class="table table-sm table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Ofis</th>
+                                    <th>Ödenek ID</th>
+                                    <th>Tarih</th>
+                                    <th class="text-end">Tutar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Harcamalar)
+                                {
+                                    <tr>
+                                        <td>@item.Ofis.Ad</td>
+                                        <td>@item.OdenekId</td>
+                                        <td>@item.Tarih.ToString("dd.MM.yyyy")</td>
+                                        <td class="text-end">@item.Tutar.ToString("N2", trCulture) ₺</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <style>
+        /* Yazdırma stilleri */
+        .print-only {
+            display: none;
+        }
+
+        @@media print {
+            .no-print {
+                display: none !important;
+            }
+
+            .print-only {
+                display: block;
+            }
+
+            body {
+                margin: 1cm;
+            }
+
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #dee2e6 !important;
+                page-break-inside: avoid; /* Kartların sayfa ortasında bölünmesini engelle */
+            }
+
+            .table {
+                font-size: 0.8rem;
+            }
+            /* Yazdırma için tabloyu biraz küçült */
+            h1 {
+                display: none;
+            }
+            /* Sayfa başlığını gizle */
+            hr {
+                display: none;
+            }
+            /* Çizgiyi gizle */
+        }
+    </style>
+}

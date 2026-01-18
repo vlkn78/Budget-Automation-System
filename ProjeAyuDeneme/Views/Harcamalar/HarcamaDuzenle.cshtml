@@ -1,0 +1,62 @@
+﻿@model ProjeAyuDeneme.Models.Mahsup
+
+@{
+    ViewData["Title"] = "Harcama Kaydını Düzenle";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Harcama Kaydını Düzenle</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="HarcamaDuzenle" method="post">
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <!-- Sadece ID'yi gizli tutuyoruz. -->
+                    <input type="hidden" asp-for="Id" />
+
+                    <!-- Form elemanları artık kartın içinde ve alt alta -->
+                    <div class="mb-3">
+                        <label asp-for="Tarih" class="form-label"></label>
+                        <input asp-for="Tarih" type="date" class="form-control" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Tutar" class="form-label"></label>
+                        <input asp-for="Tutar" id="tutar-maskeli" class="form-control" />
+                    </div>
+
+                    <div class="form-group mt-4 d-flex justify-content-end">
+                        <a asp-controller="Rapor" asp-action="HarcamaRaporu" class="btn btn-secondary me-2">İptal</a>
+                        <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- DÜZELTME: Sadece AutoNumeric script'ini bırakıyoruz, validation'ı kaldırıyoruz. -->
+
+    <script src="https://cdn.jsdelivr.net/npm/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // AutoNumeric maskesini Tutar alanına uyguluyoruz.
+            // Bu, hem formatlama yapar hem de 'unformatOnSubmit' ile sunucuya temiz veri gönderir.
+            new AutoNumeric('#tutar-maskeli', {
+                currencySymbol: ' ₺',
+                currencySymbolPlacement: 's',
+                decimalCharacter: ',',
+                digitGroupSeparator: '.',
+                unformatOnSubmit: true // BU SATIR SAYESİNDE KAYIT ÇALIŞACAK!
+            });
+        });
+    </script>
+}

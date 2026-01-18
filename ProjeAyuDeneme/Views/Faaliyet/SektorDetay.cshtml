@@ -1,0 +1,52 @@
+﻿@model ProjeAyuDeneme.Models.Sektor
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Sektör İşbirliği Detayı";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">@Model.Kurum - @Model.Donem</h3>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Ofis</dt>
+            <dd class="col-sm-9">@Model.Ofis.Ad</dd>
+
+            <dt class="col-sm-3">Ülke</dt>
+            <dd class="col-sm-9">@Model.Ulke</dd>
+
+            <dt class="col-sm-3">Kurum</dt>
+            <dd class="col-sm-9">@Model.Kurum</dd>
+
+            <dt class="col-sm-3">Mecra</dt>
+            <dd class="col-sm-9">@Model.Mecra</dd>
+
+            <dt class="col-sm-3">Dönem</dt>
+            <dd class="col-sm-9">@Model.Donem</dd>
+
+            <dt class="col-sm-3">İşbirliği Türü</dt>
+            <dd class="col-sm-9">@Model.Tur</dd>
+
+            <dt class="col-sm-3">İşbirliği Kriteri</dt>
+            <dd class="col-sm-9">@Model.Kriter</dd>
+
+            <dt class="col-sm-3">Maliyet</dt>
+            <dd class="col-sm-9">@Model.Degeri.ToString("C", trCulture)</dd>
+
+            <dt class="col-sm-3">Tertip</dt>
+            <dd class="col-sm-9">@Model.Tertip</dd>
+
+            <dt class="col-sm-3">Kaydı Giren Kullanıcı</dt>
+            <dd class="col-sm-9">@Model.User.UserName</dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <a asp-action="SektorListesi" class="btn btn-secondary">Listeye Geri Dön</a>
+    </div>
+</div>

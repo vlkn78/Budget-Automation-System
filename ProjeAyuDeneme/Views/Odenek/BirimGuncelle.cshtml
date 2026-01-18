@@ -1,0 +1,38 @@
+﻿@model ProjeAyuDeneme.Models.Ofis
+
+@{
+    ViewData["Title"] = "Ofis Güncelle";
+}
+
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Ofis Bilgisini Güncelle</h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="BirimGuncelle" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+
+                    <div class="mb-3">
+                        <label asp-for="Ad" class="form-label">Ofis Adı</label>
+                        <input asp-for="Ad" class="form-control" placeholder="Ofis adı giriniz" />
+                        <span asp-validation-for="Ad" class="text-danger"></span>
+                    </div>
+
+                    <div class="d-flex justify-content-between">                   
+                        <a asp-action="BirimEkle" class="btn btn-secondary">Listeye Geri Dön</a>                  
+                        <button type="submit" class="btn btn-primary">Değişiklikleri Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

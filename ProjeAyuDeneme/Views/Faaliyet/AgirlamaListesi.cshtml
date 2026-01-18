@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ProjeAyuDeneme.Models.Agirlama>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Ağırlama Faaliyetleri Listesi";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="AgirlamaEkle" class="btn btn-primary">Yeni Ağırlama Ekle</a>
+</p>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Henüz eklenmiş bir ağırlama kaydı bulunmamaktadır.</div>
+}
+else
+{
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Ofis Adı</th>
+                <th>Tarih</th>
+                <th>Kurum</th>
+                <th class="text-center">Kişi Sayısı</th>
+                <th class="text-end">Maliyet</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Ofis.Ad</td>
+                    <td>@item.Tarih.ToString("dd.MM.yyyy")</td>
+                    <td>@item.Kurum</td>
+                    <td class="text-center">@item.Adet</td>
+                    <td class="text-end">@item.Degeri.ToString("C", trCulture)</td>
+                    <td class="text-end">
+                    <a asp-action="AgirlamaDetay" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detay</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

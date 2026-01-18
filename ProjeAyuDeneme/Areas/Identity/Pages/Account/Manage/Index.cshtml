@@ -1,0 +1,52 @@
+﻿@page
+@model IndexModel
+@{
+   
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+
+<partial name="_StatusMessage" for="StatusMessage" />
+
+<!-- DÜZELTME: Kodu Identity'nin layout'una uygun hale getiriyoruz -->
+<!-- col-md-9'luk alan zaten _Layout.cshtml'den geliyor, biz sadece içeriği düzenliyoruz -->
+
+    <div class="card-header">
+        <h3 class="card-title">Kullanıcı Bilgileri</h3>
+    </div>
+    <div class="card-body">
+        <form id="profile-form" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3" role="alert"></div>
+
+            <!-- Kullanıcı Adı (Değiştirilemez) -->
+            <!-- form-floating yerine standart label+input kullanıyoruz -->
+            <div class="mb-3">
+                <label asp-for="Username" class="form-label"></label>
+                <input asp-for="Username" class="form-control" placeholder="Kullanıcı Adı" disabled />
+            </div>
+
+            <!-- Telefon Numarası -->
+            <div class="mb-3">
+                <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" placeholder="Telefon numaranızı giriniz." />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+
+            <!-- İSTEĞE BAĞLI: Diğer ApplicationUser alanları buraya eklenebilir -->
+            @*
+            <div class="mb-3">
+                <label asp-for="Input.AdSoyad" class="form-label"></label>
+                <input asp-for="Input.AdSoyad" class="form-control" placeholder="Adınız Soyadınız"/>
+                <span asp-validation-for="Input.AdSoyad" class="text-danger"></span>
+            </div>
+            *@
+
+            <button id="update-profile-button" type="submit" class="btn btn-primary">Kaydet</button>
+        </form>
+    </div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

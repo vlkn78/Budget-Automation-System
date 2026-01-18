@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ProjeAyuDeneme.Models.Fuar>
+@using System.Globalization
+
+@{
+    ViewData["Title"] = "Fuar Faaliyetleri Listesi";
+    var trCulture = new CultureInfo("tr-TR");
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="FuarEkle" class="btn btn-primary">Yeni Fuar Ekle</a>
+</p>
+
+<table class="table table-striped table-hover">
+    <thead>
+        <tr>
+            <th>Ofis Adı</th>
+            <th>Fuar Adı</th>
+            <th>Tarih</th>
+            <th>Tertip</th>
+            <th>Haber Sayısı</th>
+            <th>Katılımcı Sayısı</th>
+            <th class="text-end">Metrekare</th>
+            <th class="text-end">Tutar</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Ofis.Ad</td>
+                <td>@item.FuarAd</td>
+                <td>@item.Tarih.ToString("dd.MM.yyyy")</td>
+                <td>@item.Tertip</td>
+                <td>@item.Haber</td>
+                <td>@item.KatilimSayisi</td>
+                <td class="text-end">@item.StandM2.ToString("N2", trCulture)</td>
+                <td class="text-end">@item.Degeri.ToString("C", trCulture)</td>
+                <td class="text-end">
+                    <a asp-action="FuarDetay" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detay</a>
+                    @* Buraya ileride Edit ve Delete butonları da eklenebilir *@
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
